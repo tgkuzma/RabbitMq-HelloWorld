@@ -5,10 +5,13 @@ using RabbitMQ.Client.Events;
 
 namespace Receive
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
+            Console.WriteLine("----------Receiver----------");
+            Console.WriteLine("Press [Enter] to exit.");
+
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
@@ -24,13 +27,12 @@ namespace Receive
                 {
                     var body = ea.Body;
                     var message = Encoding.UTF8.GetString(body);
-                    Console.WriteLine(" [x] Received {0}", message);
+                    Console.WriteLine(" Received {0}", message);
                 };
                 channel.BasicConsume(queue: "hello",
                                      noAck: true,
                                      consumer: consumer);
 
-                Console.WriteLine(" Press [enter] to exit.");
                 Console.ReadLine();
             }
         }
